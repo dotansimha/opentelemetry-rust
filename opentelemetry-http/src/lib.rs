@@ -43,7 +43,8 @@ pub type HttpError = Box<dyn std::error::Error + Send + Sync + 'static>;
 ///
 /// Users sometime choose HTTP clients that relay on a certain async runtime. This trait allows
 /// users to bring their choice of HTTP client.
-#[async_trait]
+#[cfg_attr(target_arch = "wasm32", async_trait(?Send))]
+#[cfg_attr(not(target_arch = "wasm32"), async_trait)]
 pub trait HttpClient: Debug + Send + Sync {
     /// Send the specified HTTP request
     ///
